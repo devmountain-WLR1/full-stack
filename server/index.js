@@ -6,6 +6,7 @@ const session = require('express-session');
 // variables
 const app = express();
 const {SERVER_PORT, SESSION_SECRET, CONNECTION_STRING} = process.env;
+const auth = require('./controllers/authControl.js')
 // **top-level middleware**
 // this is where we execute some prebuilt code from our express or express-session packages for every request that comes through
 // think of this as a middleman or a filter that facilitates your endpoints
@@ -37,7 +38,10 @@ massive({
 });
 //**ENDPOINTS**
 // this is where we will write our endpoints
-
-
+// auth endpoints
+app.post('/auth/register', auth.register);
+app.post('/auth/login', auth.login);
+app.post('/auth/logout', auth.logout);
+app.get('/auth/user', auth.getUser);
 // listen
 app.listen(SERVER_PORT, () => console.log(`Get out of my swamp! ${SERVER_PORT}`));
