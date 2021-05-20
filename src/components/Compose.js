@@ -16,14 +16,22 @@ class Compose extends Component {
         })
     }
 
+    addPost = e => {
+        e.preventDefault();
+        alert('Add a post!')
+    }
+
     render(){
         return <div className="base">
-            <h1>Create a New Post</h1>
-            <form className="new-post">
-                <input name="title" value={this.state.title} type="text" onChange={this.changeHandler}/>
-                <input name="imageUrl" value={this.state.imageUrl} type="text" onChange={this.changeHandler}/>
-                <textarea name="body" value={this.state.body} type="text" onChange={this.changeHandler}/>
-            </form>
+            <div className="new-post">
+                <h1>Create a New Post</h1>
+                <form onSubmit={this.addPost}>
+                    <input name="title" value={this.state.title} type="text" placeholder="Title"onChange={this.changeHandler}/>
+                    <input name="imageUrl" value={this.state.imageUrl} type="text" placeholder="Image"onChange={this.changeHandler}/>
+                    <textarea name="body" value={this.state.body} type="text" placeholder="Type your post here..."onChange={this.changeHandler}/>
+                    <input type="submit" value="Add Post"/>
+                </form>
+            </div>
         </div>
     }
 }
