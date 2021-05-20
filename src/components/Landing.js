@@ -1,15 +1,39 @@
 import {useState} from 'react';
-// import axios from 'axios';
+import axios from 'axios';
+import {connect} from 'react-redux';
+import {loginUser} from '../redux/userReducer.js';
 
-const Landing = () => {
+const Landing = (props) => {
     const [loginInfo, setLogin] = useState({email:'', password:''})
     const [registerInfo, setRegister] = useState({email:'', username: '', password:''})
     const [loginForm, toggleForm] = useState(true)
 
     const login = (e) => {
         e.preventDefault();
-        alert("Login!")
+        const {email, password} = loginInfo
+        axios.post('/auth/login', {email, password})
+        .then(res => {
+            props.loginUser(res.data)
+            props.history.push('/main')
+        }).catch(err => {
+            console.log(err);
+            alert("Incorrect credentials!")
+        })
     }
+
+    const register = e => {
+        e.preventDefault();
+        const {email, password, username} = registerInfo
+        axios.post('/auth/register', {email, password, username})
+        .then(res => {
+            props.loginUser(res.data)
+            props.history.push('/main')
+        }).catch(err => {
+            console.log(err);
+            alert("That user already exists!")
+        })
+    }
+
     return <div className="base">
         {loginForm 
         ? 
@@ -24,7 +48,7 @@ const Landing = () => {
         </div>
         :
         <div className="form-container">
-            <form onSubmit={login}>
+            <form onSubmit={register}>
                 <input value={registerInfo.email} type="text" placeholder="email" onChange={(e) => setRegister({...registerInfo, email: e.target.value})}/>
                 <input value={registerInfo.username} type="text" placeholder="username" onChange={(e) => setRegister({...registerInfo, username: e.target.value})}/>
                 <input value={registerInfo.password} type="password" placeholder="password" onChange={(e) => setRegister({...registerInfo, password: e.target.value})}/>
@@ -36,4 +60,5 @@ const Landing = () => {
     </div>
 }
 
-export default Landing;
+
+export default connect(null, {loginUser})(Landing);
